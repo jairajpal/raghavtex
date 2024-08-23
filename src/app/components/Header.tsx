@@ -3,23 +3,25 @@ import ThemeToggleButton from "./ThemeToggleButton";
 
 const Header = () => {
   return (
-    <header className="text-gray-600 body-font">
+    <header className="body-font">
       <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <a className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <a className="flex title-font font-medium items-center  mb-4 md:mb-0">
           <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-full" />
-          <span className="ml-3 text-xl">Raghav tex</span>
         </a>
+        <Link href="/" className="hover:text-gray-500">
+          <span className="ml-3 text-xl">Raghav tex</span>
+        </Link>
         <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-          <Link href="/first" className="mr-5 hover:text-gray-900">
-            First Link
+          <Link href="/raw-material" className="mr-5 hover:text-gray-500">
+            Raw Material
           </Link>
-          <Link href="/second" className="mr-5 hover:text-gray-900">
-            Second Link
+          <Link href="/company" className="mr-5 hover:text-gray-500">
+            Company
           </Link>
-          <Link href="/third" className="mr-5 hover:text-gray-900">
-            Third Link
+          <Link href="/tana" className="mr-5 hover:text-gray-500">
+            Tana
           </Link>
-          <Link href="/fourth" className="mr-5 hover:text-gray-900">
+          <Link href="/fourth" className="mr-5 hover:text-gray-500">
             Fourth Link
           </Link>
         </nav>

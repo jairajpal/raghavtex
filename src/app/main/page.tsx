@@ -6,8 +6,8 @@ export default function Main({ children }: { children: React.ReactNode }) {
       <Image
         src="/path-to-your-image.jpg" // Replace with your image path
         alt="Background Image"
-        layout="fill"
-        objectFit="cover"
+        fill
+        style={{ objectFit: "cover" }}
         quality={100}
         className="z-0"
       />

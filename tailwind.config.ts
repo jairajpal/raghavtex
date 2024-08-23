@@ -34,6 +34,12 @@ const config: Config = {
       },
     },
   },
+  variants: {
+    extend: {
+      backgroundColor: ["dark"],
+      textColor: ["dark"],
+    },
+  },
   plugins: [],
 };
 
