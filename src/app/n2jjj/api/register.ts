@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
-import { db } from "../../lib/db"; // Update with your database setup
+import { db } from "../../../../lib/db"; // Update with your database setup
 
 export default async function handler(
   req: NextApiRequest,

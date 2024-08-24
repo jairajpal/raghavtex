@@ -47,7 +47,6 @@ const FormComponent: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data submitted:", formData);
     // Handle form submission logic here
   };
 

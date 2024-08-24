@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useTheme } from "../components/ThemeContext";
 import "../../../styles/globals.css"; // Ensure your global styles are imported
-import { TanaList } from "../components/Tana";
+import { TanaList } from "../components/TanaList";
 
 interface FormData {
   date: string;

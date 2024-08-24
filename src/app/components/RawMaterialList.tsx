@@ -23,16 +23,16 @@ const RawMaterialList: React.FC = () => {
 
   useEffect(() => {
     // Replace this URL with your actual API endpoint
-    fetch("https://api.example.com/data")
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
+    // fetch("https://api.example.com/data")
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setData(data);
+    //     setLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching data:", error);
+    //     setLoading(false);
+    //   });
   }, []);
 
   return (

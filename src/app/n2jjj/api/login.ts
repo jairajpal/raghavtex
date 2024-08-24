@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { db } from "../../lib/db"; // Update with your database setup
+import { db } from "../../../../lib/db"; // Update with your database setup
 
 const SECRET_KEY = "your_secret_key";
 

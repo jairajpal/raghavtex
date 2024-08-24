@@ -2,9 +2,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import "../../styles/globals.css"; // Ensure your global styles are imported
 import { ThemeProvider } from "../app/components/ThemeContext"; // Adjust path as needed
-// import { TestComponent } from "./components/Test";
-import { BasicProvider } from "./components/BasicContext";
-import { BasicTest } from "./components/BasicTest";
+import { AuthProvider } from "../../contexts/AuthContext";
 
 export const metadata = {
   title: "Your App Title",
@@ -26,18 +24,20 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ThemeProvider>
-          <header className="flex-none h-[15%]">
-            <Header />
-          </header>
-          <div className="flex flex-col h-screen">
-            <main className="flex-grow relative h-[60%]">{children}</main>
-          </div>
-          <footer className="flex-none h-[5%]">
-            <Footer />
-          </footer>
-          {/* <TestComponent /> */}
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <header className="flex-none h-[15%]">
+              <Header />
+            </header>
+            <div className="flex flex-col h-screen">
+              <main className="flex-grow relative h-[60%]">{children}</main>
+            </div>
+            <footer className="flex-none h-[5%]">
+              <Footer />
+            </footer>
+            {/* <TestComponent /> */}
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
