@@ -11,18 +11,19 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const token = document.cookie
       .split("; ")
-      .find((row) => row.startsWith("token="));
+      .find((row) => row.startsWith("csrftoken="));
     if (token) {
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
     }
+    console.log("isAuthenticated: ", isAuthenticated);
   }, []);
 
   const login = () => {
@@ -30,7 +31,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = () => {
-    document.cookie = "token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    // Clear the specific cookies by setting them with an expired date
+    document.cookie =
+      "csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
     setIsAuthenticated(false);
     router.push("/");
   };

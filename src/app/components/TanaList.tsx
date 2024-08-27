@@ -6,7 +6,7 @@ interface DataItem {
   date: string;
   loomNo: string;
   company: string;
-  designType: string;
+  design_type: string;
   warp: string;
   warpColor: string;
   weft: string;
@@ -67,7 +67,7 @@ export const TanaList: React.FC = () => {
                 <td className="tableData">{item.date}</td>
                 <td className="tableData">{item.loomNo}</td>
                 <td className="tableData">{item.company}</td>
-                <td className="tableData">{item.designType}</td>
+                <td className="tableData">{item.design_type}</td>
                 <td className="tableData">{item.warp}</td>
                 <td className="tableData">{item.warpColor}</td>
                 <td className="tableData">{item.weft}</td>

@@ -7,20 +7,30 @@ import "../../../styles/globals.css";
 import Image from "next/image";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useEffect } from "react";
+import axiosInstance from "../../utils/axiosInstance";
 
 const LoginPage = () => {
   const { register, handleSubmit } = useForm();
   const { isAuthenticated, login } = useAuth();
 
+  const getCSRFToken = () => {
+    const csrfCookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("csrftoken="))
+      ?.split("=")[1];
+    return csrfCookie;
+  };
+
   const router = useRouter();
 
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/login/",
-        data
-      );
-      console.log("response: ", response);
+      const response = await axiosInstance.post("/api/login/", data, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken(),
+        },
+      });
       // check if the user is authenticated
       login();
       router.push("/home");

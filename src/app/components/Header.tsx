@@ -4,28 +4,59 @@ import ThemeToggleButton from "./ThemeToggleButton";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const { isAuthenticated, logout } = useAuth();
+  const router = useRouter();
+
+  console.log("isAuthenticated: Header", isAuthenticated);
+
   const [href, setHref] = useState("/");
   const [profile, setProfile] = useState(null);
 
+  const getCSRFToken = () => {
+    const csrfCookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("csrftoken="))
+      ?.split("=")[1];
+    return csrfCookie;
+  };
+
   const fetchProfile = async () => {
     try {
-      const response = await axios.get("/api/profile");
+      const response = await axiosInstance.get("/api/profile/", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
       setProfile(response.data);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.error("Failed to fetch profile:", error.response.statusText);
-        } else if (error.request) {
-          console.error("No response received:", error.request);
-        } else {
-          console.error("Error fetching profile:", error.message);
+      console.error("Error logging in", error);
+    }
+  };
+
+  const onLogout = async () => {
+    try {
+      console.log("onLogout: ");
+      console.log("getCSRFToken(): ", getCSRFToken());
+      const response = await axiosInstance.post(
+        "/api/logout/",
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken(),
+          },
         }
-      } else {
-        console.error("Unexpected error:", error);
-      }
+      );
+      console.log("response: ", response);
+      logout();
+      router.push("/login");
+    } catch (error) {
+      console.error("Error logging in", error);
     }
   };
 
@@ -70,7 +101,7 @@ const Header = () => {
           <ThemeToggleButton />
         </div>
         <div className="px-8">
-          <button className="btn relative" onClick={logout}>
+          <button className="btn relative" onClick={onLogout}>
             Logout
           </button>
         </div>

@@ -32,8 +32,8 @@ export default function RootLayout({
             <div className="flex flex-col h-screen">
               <main className="flex-grow relative h-[60%]">{children}</main>
             </div>
-            <footer className="flex-none h-[5%]">
-              <Footer />
+            <footer className="flex flex-none h-[5%]">
+              {/* <Footer /> */}
             </footer>
             {/* <TestComponent /> */}
           </ThemeProvider>

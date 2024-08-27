@@ -8,7 +8,7 @@ interface FormData {
   date: string;
   loomNo: string;
   company: string;
-  designType: string;
+  design_type: string;
   warp: string;
   warpColor: string;
   weft: string;
@@ -26,7 +26,7 @@ const initialFormData: FormData = {
   date: "",
   loomNo: "",
   company: "",
-  designType: "",
+  design_type: "",
   warp: "",
   warpColor: "",
   weft: "",
@@ -104,14 +104,14 @@ const CompanyFormComponent: React.FC = () => {
             />
           </div>
           <div>
-            <label htmlFor="designType" className="block mb-1">
+            <label htmlFor="design_type" className="block mb-1">
               Design Type
             </label>
             <input
               type="text"
-              id="designType"
-              name="designType"
-              value={formData.designType}
+              id="design_type"
+              name="design_type"
+              value={formData.design_type}
               onChange={handleChange}
               placeholder="Design Type"
               className={`p-2 border rounded w-full ${

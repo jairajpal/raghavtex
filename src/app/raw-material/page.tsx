@@ -1,42 +1,70 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RawMaterialList from "../components/RawMaterialList";
 import "../../../styles/globals.css"; // Ensure your global styles are imported
 import { useTheme } from "../components/ThemeContext";
+import axios from "axios";
+import { getCSRFToken } from "../../utils/tools";
+import axiosInstance from "@/utils/axiosInstance";
 
 interface FormData {
   date: string;
-  challanNo: string;
+  challan_no: string;
   company: string;
-  designType: string;
+  design: string;
+  type: string;
   size: string;
   color: string;
   quantity: number;
   weight: number;
   remarks: string;
   quality: string;
-  shuttleOrMat: string;
+  shuttle_or_mat: string;
+  receiving: string;
+}
+
+interface DataItem {
+  date: string;
+  challan_no: string;
+  company: string;
+  design: string;
+  type: string;
+  size: string;
+  color: string;
+  quantity: number;
+  weight: number;
+  remarks: string;
+  quality: string;
+  shuttle_or_mat: string;
   receiving: string;
 }
 
 const initialFormData: FormData = {
   date: "",
-  challanNo: "",
+  challan_no: "",
   company: "",
-  designType: "",
+  design: "",
+  type: "",
   size: "",
   color: "",
   quantity: 0,
   weight: 0,
   remarks: "",
   quality: "",
-  shuttleOrMat: "",
+  shuttle_or_mat: "",
   receiving: "",
 };
 
 const FormComponent: React.FC = () => {
   const { theme } = useTheme();
   const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [productsData, setProductsData] = useState<DataItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [csvFile, setCsvFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    fetchData(); // Call the async function
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -45,15 +73,67 @@ const FormComponent: React.FC = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get("/api/products/", {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken(),
+        },
+      });
+      setProductsData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
+    const response = await axiosInstance.post("/api/products/", formData, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCSRFToken(),
+      },
+    });
+    await fetchData();
+
+    console.log("response: ", response);
+  };
+
+  const handleCsvUpload = async () => {
+    if (!csvFile) return;
+
+    const formData = new FormData();
+    formData.append("file", csvFile);
+
+    try {
+      const response = await axiosInstance.post("/api/upload/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "X-CSRFToken": getCSRFToken(),
+        },
+      });
+      console.log("CSV upload response:", response);
+      await fetchData(); // Reload the data after successful upload
+    } catch (error) {
+      console.error("Error uploading CSV:", error);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setCsvFile(e.target.files[0]);
+    }
   };
 
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-4 p-4">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
           <div>
             <label htmlFor="date" className="block mb-1">
               Date
@@ -71,14 +151,14 @@ const FormComponent: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="challanNo" className="block mb-1">
+            <label htmlFor="challan_no" className="block mb-1">
               Challan No.
             </label>
             <input
               type="text"
-              id="challanNo"
-              name="challanNo"
-              value={formData.challanNo}
+              id="challan_no"
+              name="challan_no"
+              value={formData.challan_no}
               onChange={handleChange}
               placeholder="Challan No."
               className={`p-2 border rounded w-full ${
@@ -105,16 +185,33 @@ const FormComponent: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="designType" className="block mb-1">
+            <label htmlFor="design" className="block mb-1">
               Design Type
             </label>
             <input
               type="text"
-              id="designType"
-              name="designType"
-              value={formData.designType}
+              id="design"
+              name="design"
+              value={formData.design}
               onChange={handleChange}
-              placeholder="Design Type"
+              placeholder="Design"
+              className={`p-2 border rounded w-full ${
+                theme === "dark" ? "dark" : "light"
+              }`}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="type" className="block mb-1">
+              Design Type
+            </label>
+            <input
+              type="text"
+              id="type"
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              placeholder="Type"
               className={`p-2 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
               }`}
@@ -224,14 +321,14 @@ const FormComponent: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="shuttleOrMat" className="block mb-1">
+            <label htmlFor="shuttle_or_mat" className="block mb-1">
               Shuttle or Mat
             </label>
             <input
               type="text"
-              id="shuttleOrMat"
-              name="shuttleOrMat"
-              value={formData.shuttleOrMat}
+              id="shuttle_or_mat"
+              name="shuttle_or_mat"
+              value={formData.shuttle_or_mat}
               onChange={handleChange}
               placeholder="Shuttle or Mat"
               className={`p-2 border rounded w-full ${
@@ -263,7 +360,26 @@ const FormComponent: React.FC = () => {
           </button>
         </div>
       </form>
-      <RawMaterialList />
+      <div className="flex justify-end mb-4">
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleFileChange}
+          className="hidden"
+          id="upload-csv"
+        />
+        <label htmlFor="upload-csv" className="btn">
+          Choose CSV File
+        </label>
+        <button
+          onClick={handleCsvUpload}
+          className="btn ml-2 mr-6"
+          disabled={!csvFile}
+        >
+          Upload CSV
+        </button>
+      </div>
+      <RawMaterialList productsData={productsData} loading={loading} />
     </>
   );
 };
