@@ -2,25 +2,11 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
 import { useTheme } from "./ThemeContext";
-
-interface ProductsData {
-  date: string;
-  challan_no: string;
-  company: string;
-  design: string;
-  type: string;
-  size: string;
-  color: string;
-  quantity: number;
-  weight: number;
-  remarks: string;
-  quality: string;
-  shuttle_or_mat: string;
-  receiving: string;
-}
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import axiosInstance from "@/utils/axiosInstance";
+import { getCSRFToken } from "@/utils/tools";
 
 interface ProductsDataProps {
-  productsData: ProductsData[];
   loading: boolean;
   filters: any;
   setFilters: any;
@@ -28,10 +14,11 @@ interface ProductsDataProps {
   shuttleOrMats: any;
   receivings: any;
   filteredData: any;
+  onUpdate: any;
+  deleteProduct: any;
 }
 
 const RawMaterialList: React.FC<ProductsDataProps> = ({
-  productsData,
   loading,
   filters,
   setFilters,
@@ -39,6 +26,8 @@ const RawMaterialList: React.FC<ProductsDataProps> = ({
   shuttleOrMats,
   receivings,
   filteredData,
+  onUpdate,
+  deleteProduct,
 }) => {
   const { theme } = useTheme();
 
@@ -52,6 +41,27 @@ const RawMaterialList: React.FC<ProductsDataProps> = ({
       [name]: value,
     }));
   };
+
+  const onEdit = (e: any) => {
+    onUpdate(e);
+  };
+
+  const onCopy = (e: any) => {
+    e.id = "";
+    onUpdate(e);
+  };
+
+  const onDelete = async (id: any) => {
+    await axiosInstance.delete("/api/products/" + id + "/", {
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCSRFToken(),
+      },
+    });
+    deleteProduct(id);
+  };
+
+  useEffect(() => {}, [filteredData]);
 
   return (
     <div className="overflow-x-auto p-4 max-h-[800px] overflow-y-auto">
@@ -242,6 +252,23 @@ const RawMaterialList: React.FC<ProductsDataProps> = ({
                 </td>
                 <td className="tableData">{item.shuttle_or_mat}</td>
                 <td className="tableData">{item.receiving}</td>
+                <td className="px-2 border">
+                  <button onClick={() => onCopy(item)} className="action-btn">
+                    <i className="fas fa-copy"></i>
+                  </button>
+                  <button
+                    onClick={() => onEdit(item)}
+                    className="action-btn ml-2"
+                  >
+                    <i className="fas fa-edit"></i>
+                  </button>
+                  <button
+                    onClick={() => onDelete(item.id)}
+                    className="action-btn ml-2"
+                  >
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </td>
               </tr>
             ))
           ) : (

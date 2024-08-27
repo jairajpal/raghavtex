@@ -9,6 +9,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import CreatableSelect from "react-select/creatable"; // Import CreatableSelect
 
 interface FormData {
+  id: 0;
   date: string;
   challan_no: string;
   company: string;
@@ -19,12 +20,13 @@ interface FormData {
   quantity: number;
   weight: number;
   remarks: string;
-  quality: string;
   shuttle_or_mat: string;
   receiving: string;
+  form_enum: string;
 }
 
 interface DataItem {
+  id: number;
   date: string;
   challan_no: string;
   company: string;
@@ -35,12 +37,13 @@ interface DataItem {
   quantity: number;
   weight: number;
   remarks: string;
-  quality: string;
   shuttle_or_mat: string;
   receiving: string;
+  form_enum: string;
 }
 
 const initialFormData: FormData = {
+  id: 0,
   date: "",
   challan_no: "",
   company: "",
@@ -51,9 +54,9 @@ const initialFormData: FormData = {
   quantity: 0,
   weight: 0,
   remarks: "",
-  quality: "",
   shuttle_or_mat: "",
   receiving: "",
+  form_enum: "raw",
 };
 
 const FormComponent: React.FC = () => {
@@ -61,6 +64,7 @@ const FormComponent: React.FC = () => {
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [productsData, setProductsData] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isRaw, setIsRaw] = useState<boolean>(true);
   const [csvFile, setCsvFile] = useState<File | null>(null);
   // Initialize filter state
   const [filters, setFilters] = useState({
@@ -74,10 +78,20 @@ const FormComponent: React.FC = () => {
     color: "",
     quantity: "",
     remarks: "",
-    quality: "",
     shuttle_or_mat: "",
     receiving: "",
   });
+
+  const handleUpdate = (newValue: any) => {
+    setFormData(newValue);
+  };
+
+  const handleDelete = (id: any) => {
+    const updatedProductsData: any = productsData.filter(
+      (item) => item.id !== id
+    );
+    setProductsData(updatedProductsData);
+  };
 
   // Extract unique values for dropdowns
   const companies = useMemo(
@@ -268,7 +282,6 @@ const FormComponent: React.FC = () => {
         (filters.remarks
           ? item.remarks.toLowerCase().includes(filters.remarks.toLowerCase())
           : true) &&
-        (filters.quality ? item.quality === filters.quality : true) &&
         (filters.shuttle_or_mat
           ? item.shuttle_or_mat === filters.shuttle_or_mat
           : true) &&
@@ -278,8 +291,9 @@ const FormComponent: React.FC = () => {
   }, [productsData, filters]);
 
   useEffect(() => {
+    formData.form_enum = isRaw ? "raw" : "dispatch";
     fetchData(); // Call the async function
-  }, []);
+  }, [isRaw]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -292,6 +306,7 @@ const FormComponent: React.FC = () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get("/api/products/", {
+        params: { form_enum: formData.form_enum },
         headers: {
           "Content-Type": "application/json",
           "X-CSRFToken": getCSRFToken(),
@@ -307,16 +322,30 @@ const FormComponent: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    let response: any = {};
     // Handle form submission logic here
-    const response = await axiosInstance.post("/api/products/", formData, {
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCSRFToken(),
-      },
-    });
-    await fetchData();
-
-    console.log("response: ", response);
+    if (!formData.id) {
+      formData.form_enum = isRaw ? "raw" : "dispatch";
+      response = await axiosInstance.post("/api/products/", formData, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken(),
+        },
+      });
+    } else {
+      await axiosInstance.put("/api/products/" + formData.id + "/", formData, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken(),
+        },
+      });
+    }
+    // if (response && response?.data) {
+    //   console.log("response.data: ", response.data);
+    //   const updatedProductsData: any = [response.data, ...productsData];
+    //   setProductsData(updatedProductsData);
+    // }
+    fetchData();
   };
 
   const handleCsvUpload = async () => {
@@ -345,10 +374,39 @@ const FormComponent: React.FC = () => {
     }
   };
 
+  const clear = () => {
+    console.log("initialFormData: ", initialFormData);
+    setFormData(initialFormData);
+    return;
+  };
+
+  const handleToggle = (check: boolean) => {
+    check ? setIsRaw(true) : setIsRaw(false);
+  };
+
   return (
     <>
-      <form onSubmit={handleSubmit} className="space-y-4 p-4">
-        <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+      <div className="flex rounded px-10 overflow-hidden py-4">
+        <button
+          className={`flex-1 py-2 rounded-full text-center font-semibold transition-colors duration-1000 ${
+            !isRaw ? "bg-gray-200 text-gray-800" : "bg-blue-500 text-white"
+          }`}
+          onClick={() => handleToggle(true)}
+        >
+          Raw Material
+        </button>
+        <button
+          className={`flex-1 py-2 rounded-full text-center font-semibold transition-colors duration-1000 ${
+            isRaw ? "bg-gray-200 text-gray-800" : "bg-blue-500 text-white"
+          }`}
+          onClick={() => handleToggle(false)}
+        >
+          Dispatch Product
+        </button>
+      </div>
+
+      <div className="space-y-4 p-4">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
           <div>
             <label htmlFor="date" className="label-group">
               Date
@@ -395,7 +453,7 @@ const FormComponent: React.FC = () => {
               }
               onChange={handleCompanyChange}
               placeholder="Search"
-              className={`p-0 border rounded w-full ${
+              className={`p-0 border rounded w-full z-auto${
                 theme === "dark" ? "dark" : "light"
               }`}
               noOptionsMessage={() => "No company found"}
@@ -571,21 +629,6 @@ const FormComponent: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="quality" className="label-group">
-              Quality
-            </label>
-            <input
-              type="text"
-              id="quality"
-              name="quality"
-              value={formData.quality}
-              onChange={handleChange}
-              placeholder="Quality"
-              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
-            />
-          </div>
-
-          <div>
             <label htmlFor="shuttle_or_mat" className="label-group">
               Shuttle or Mat
             </label>
@@ -643,11 +686,14 @@ const FormComponent: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center justify-center">
-          <button type="submit" className="btn">
+          <button onClick={handleSubmit} className="btn">
             Save
           </button>
+          <button onClick={clear} className="btn ml-4">
+            Clear
+          </button>
         </div>
-      </form>
+      </div>
       <div className="flex justify-end mb-4">
         <input
           type="file"
@@ -668,7 +714,6 @@ const FormComponent: React.FC = () => {
         </button>
       </div>
       <RawMaterialList
-        productsData={productsData}
         loading={loading}
         filters={filters}
         setFilters={setFilters}
@@ -676,6 +721,8 @@ const FormComponent: React.FC = () => {
         shuttleOrMats={shuttleOrMats}
         receivings={receivings}
         filteredData={filteredData}
+        onUpdate={handleUpdate}
+        deleteProduct={handleDelete}
       />
     </>
   );

@@ -83,7 +83,7 @@ const Header = () => {
           {isAuthenticated && (
             <>
               <Link href="/raw-material" className="mr-5 hover:text-gray-500">
-                Raw Material
+                Inventory Management
               </Link>
               <Link href="/company" className="mr-5 hover:text-gray-500">
                 Company
