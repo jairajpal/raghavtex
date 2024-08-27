@@ -25,6 +25,14 @@
   @apply px-4 py-2 border;
 }
 
+.input-group {
+  @apply p-2 border rounded w-full;
+}
+
+.label-group {
+  @apply block mb-1;
+}
+
 /* 
 
 @media (prefers-color-scheme: dark) {

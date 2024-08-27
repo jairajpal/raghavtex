@@ -57,7 +57,7 @@ const CompanyFormComponent: React.FC = () => {
       <form className="space-y-4 p-4">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div>
-            <label htmlFor="date" className="block mb-1">
+            <label htmlFor="date" className="label-group">
               Date
             </label>
             <input
@@ -66,13 +66,11 @@ const CompanyFormComponent: React.FC = () => {
               name="date"
               value={formData.date}
               onChange={handleChange}
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="loomNo" className="block mb-1">
+            <label htmlFor="loomNo" className="label-group">
               Loom No.
             </label>
             <input
@@ -82,13 +80,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.loomNo}
               onChange={handleChange}
               placeholder="Loom No."
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="company" className="block mb-1">
+            <label htmlFor="company" className="label-group">
               Company
             </label>
             <input
@@ -98,13 +94,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.company}
               onChange={handleChange}
               placeholder="Company"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="design_type" className="block mb-1">
+            <label htmlFor="design_type" className="label-group">
               Design Type
             </label>
             <input
@@ -114,13 +108,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.design_type}
               onChange={handleChange}
               placeholder="Design Type"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="warp" className="block mb-1">
+            <label htmlFor="warp" className="label-group">
               Warp
             </label>
             <input
@@ -130,13 +122,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.warp}
               onChange={handleChange}
               placeholder="Warp"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="warpColor" className="block mb-1">
+            <label htmlFor="warpColor" className="label-group">
               Warp Color
             </label>
             <input
@@ -146,13 +136,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.warpColor}
               onChange={handleChange}
               placeholder="Warp Color"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="weft" className="block mb-1">
+            <label htmlFor="weft" className="label-group">
               Weft
             </label>
             <input
@@ -162,13 +150,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.weft}
               onChange={handleChange}
               placeholder="Weft"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="weftColor" className="block mb-1">
+            <label htmlFor="weftColor" className="label-group">
               Weft Color
             </label>
             <input
@@ -178,13 +164,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.weftColor}
               onChange={handleChange}
               placeholder="Weft Color"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="widthInch" className="block mb-1">
+            <label htmlFor="widthInch" className="label-group">
               Width (inch)
             </label>
             <input
@@ -194,13 +178,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.widthInch}
               onChange={handleChange}
               placeholder="Width (inch)"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="lengthMeter" className="block mb-1">
+            <label htmlFor="lengthMeter" className="label-group">
               Length (Meter)
             </label>
             <input
@@ -210,13 +192,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.lengthMeter}
               onChange={handleChange}
               placeholder="Length (Meter)"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="threadCount" className="block mb-1">
+            <label htmlFor="threadCount" className="label-group">
               Thread Count
             </label>
             <input
@@ -226,13 +206,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.threadCount}
               onChange={handleChange}
               placeholder="Thread Count"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="reedBoram" className="block mb-1">
+            <label htmlFor="reedBoram" className="label-group">
               Reed
             </label>
             <input
@@ -242,13 +220,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.reed}
               onChange={handleChange}
               placeholder="Reed"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="reedBoram" className="block mb-1">
+            <label htmlFor="reedBoram" className="label-group">
               B or M
             </label>
             <input
@@ -258,13 +234,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.bOrM}
               onChange={handleChange}
               placeholder="B or M"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="dentThread" className="block mb-1">
+            <label htmlFor="dentThread" className="label-group">
               Dent Thread
             </label>
             <input
@@ -274,13 +248,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.dentThread}
               onChange={handleChange}
               placeholder="Dent Thread"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="remarks" className="block mb-1">
+            <label htmlFor="remarks" className="label-group">
               Remarks
             </label>
             <input
@@ -290,9 +262,7 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.remarks}
               onChange={handleChange}
               placeholder="Remarks"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
         </div>

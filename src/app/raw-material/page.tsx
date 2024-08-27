@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import RawMaterialList from "../components/RawMaterialList";
 import "../../../styles/globals.css"; // Ensure your global styles are imported
 import { useTheme } from "../components/ThemeContext";
 import axios from "axios";
 import { getCSRFToken } from "../../utils/tools";
 import axiosInstance from "@/utils/axiosInstance";
+import CreatableSelect from "react-select/creatable"; // Import CreatableSelect
 
 interface FormData {
   date: string;
@@ -61,6 +62,220 @@ const FormComponent: React.FC = () => {
   const [productsData, setProductsData] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [csvFile, setCsvFile] = useState<File | null>(null);
+  // Initialize filter state
+  const [filters, setFilters] = useState({
+    startDate: "",
+    endDate: "",
+    challan_no: "",
+    company: "",
+    design: "",
+    type: "",
+    size: "",
+    color: "",
+    quantity: "",
+    remarks: "",
+    quality: "",
+    shuttle_or_mat: "",
+    receiving: "",
+  });
+
+  // Extract unique values for dropdowns
+  const companies = useMemo(
+    () => Array.from(new Set(productsData.map((item) => item.company))),
+    [productsData]
+  );
+
+  const companyOptions = companies.map((company) => ({
+    label: company,
+    value: company,
+  }));
+
+  const handleCompanyChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "company",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const designs = useMemo(
+    () => Array.from(new Set(productsData.map((item) => item.design))),
+    [productsData]
+  );
+
+  const designOptions = designs.map((design) => ({
+    label: design,
+    value: design,
+  }));
+
+  const handleDesignChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "design",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const types = useMemo(
+    () => Array.from(new Set(productsData.map((item) => item.type))),
+    [productsData]
+  );
+
+  const typeOptions = types.map((type) => ({
+    label: type,
+    value: type,
+  }));
+
+  const handleTypeChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "type",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const colors = useMemo(
+    () => Array.from(new Set(productsData.map((item) => item.color))),
+    [productsData]
+  );
+
+  const colorOptions = colors.map((color) => ({
+    label: color,
+    value: color,
+  }));
+
+  const handleColorChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "color",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const sizes = useMemo(
+    () => Array.from(new Set(productsData.map((item) => item.size))),
+    [productsData]
+  );
+
+  const sizeOptions = sizes.map((size) => ({
+    label: size,
+    value: size,
+  }));
+
+  const handleSizeChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "size",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const remarks = useMemo(
+    () => Array.from(new Set(productsData.map((item) => item.remarks))),
+    [productsData]
+  );
+
+  const remarkOptions = remarks.map((remark) => ({
+    label: remark,
+    value: remark,
+  }));
+
+  const handleRemarkChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "remarks",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const shuttleOrMats = useMemo(
+    () => Array.from(new Set(productsData.map((item) => item.shuttle_or_mat))),
+    [productsData]
+  );
+
+  const shuttleOrMatOptions = shuttleOrMats.map((shuttle_or_mat) => ({
+    label: shuttle_or_mat,
+    value: shuttle_or_mat,
+  }));
+
+  const handleShuttleOrMatChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "shuttle_or_mat",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const receivings = useMemo(
+    () => Array.from(new Set(productsData.map((item) => item.receiving))),
+    [productsData]
+  );
+
+  const receivingOptions = receivings.map((receiving) => ({
+    label: receiving,
+    value: receiving,
+  }));
+
+  const handleReceivingChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "receiving",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  // Filtered data based on filters
+  const filteredData = useMemo(() => {
+    return productsData.filter((item) => {
+      const itemDate = new Date(item.date);
+      const startDate = filters.startDate ? new Date(filters.startDate) : null;
+      const endDate = filters.endDate ? new Date(filters.endDate) : null;
+
+      const isWithinDateRange =
+        (!startDate || itemDate >= startDate) &&
+        (!endDate || itemDate <= endDate);
+      return (
+        isWithinDateRange &&
+        (filters.challan_no
+          ? item.challan_no
+              .toLowerCase()
+              .includes(filters.challan_no.toLowerCase())
+          : true) &&
+        (filters.company ? item.company === filters.company : true) &&
+        (filters.design
+          ? item.design.toLowerCase().includes(filters.design.toLowerCase())
+          : true) &&
+        (filters.type
+          ? item.type.toLowerCase().includes(filters.type.toLowerCase())
+          : true) &&
+        (filters.size
+          ? item.size.toLowerCase().includes(filters.size.toLowerCase())
+          : true) &&
+        (filters.color
+          ? item.color.toLowerCase().includes(filters.color.toLowerCase())
+          : true) &&
+        (filters.quantity
+          ? item.quantity === Number(filters.quantity)
+          : true) &&
+        (filters.remarks
+          ? item.remarks.toLowerCase().includes(filters.remarks.toLowerCase())
+          : true) &&
+        (filters.quality ? item.quality === filters.quality : true) &&
+        (filters.shuttle_or_mat
+          ? item.shuttle_or_mat === filters.shuttle_or_mat
+          : true) &&
+        (filters.receiving ? item.receiving === filters.receiving : true)
+      );
+    });
+  }, [productsData, filters]);
 
   useEffect(() => {
     fetchData(); // Call the async function
@@ -135,7 +350,7 @@ const FormComponent: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-4 p-4">
         <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
           <div>
-            <label htmlFor="date" className="block mb-1">
+            <label htmlFor="date" className="label-group">
               Date
             </label>
             <input
@@ -144,14 +359,12 @@ const FormComponent: React.FC = () => {
               name="date"
               value={formData.date}
               onChange={handleChange}
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
 
           <div>
-            <label htmlFor="challan_no" className="block mb-1">
+            <label htmlFor="challan_no" className="label-group">
               Challan No.
             </label>
             <input
@@ -161,99 +374,147 @@ const FormComponent: React.FC = () => {
               value={formData.challan_no}
               onChange={handleChange}
               placeholder="Challan No."
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
 
           <div>
-            <label htmlFor="company" className="block mb-1">
+            <label htmlFor="company" className="label-group">
               Company
             </label>
-            <input
-              type="text"
+            <CreatableSelect
               id="company"
               name="company"
-              value={formData.company}
-              onChange={handleChange}
-              placeholder="Company"
-              className={`p-2 border rounded w-full ${
+              options={companyOptions}
+              isClearable
+              isSearchable
+              value={
+                formData.company
+                  ? { label: formData.company, value: formData.company }
+                  : null
+              }
+              onChange={handleCompanyChange}
+              placeholder="Search"
+              className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
               }`}
+              noOptionsMessage={() => "No company found"}
+              formatCreateLabel={(inputValue) =>
+                `Create new company: "${inputValue}"`
+              }
             />
           </div>
 
           <div>
-            <label htmlFor="design" className="block mb-1">
-              Design Type
+            <label htmlFor="design" className="label-group">
+              Design
             </label>
-            <input
-              type="text"
+            <CreatableSelect
               id="design"
               name="design"
-              value={formData.design}
-              onChange={handleChange}
-              placeholder="Design"
-              className={`p-2 border rounded w-full ${
+              options={designOptions}
+              isClearable
+              isSearchable
+              value={
+                formData.design
+                  ? { label: formData.design, value: formData.design }
+                  : null
+              }
+              onChange={handleDesignChange}
+              placeholder="Search"
+              className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
               }`}
+              noOptionsMessage={() => "No design found"}
+              formatCreateLabel={(inputValue) =>
+                `Create new design: "${inputValue}"`
+              }
             />
           </div>
 
           <div>
-            <label htmlFor="type" className="block mb-1">
-              Design Type
+            <label htmlFor="type" className="label-group">
+              Type
             </label>
-            <input
-              type="text"
+            <CreatableSelect
               id="type"
               name="type"
-              value={formData.type}
-              onChange={handleChange}
-              placeholder="Type"
-              className={`p-2 border rounded w-full ${
+              options={typeOptions}
+              isClearable
+              isSearchable
+              value={
+                formData.type
+                  ? { label: formData.type, value: formData.type }
+                  : null
+              }
+              onChange={handleTypeChange}
+              placeholder="Search"
+              className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
               }`}
+              noOptionsMessage={() => "No type found"}
+              formatCreateLabel={(inputValue) =>
+                `Create new type: "${inputValue}"`
+              }
             />
           </div>
 
           <div>
-            <label htmlFor="size" className="block mb-1">
+            <label htmlFor="size" className="label-group">
               Size
             </label>
-            <input
-              type="text"
+            <CreatableSelect
               id="size"
               name="size"
-              value={formData.size}
-              onChange={handleChange}
-              placeholder="Size"
-              className={`p-2 border rounded w-full ${
+              options={sizeOptions}
+              isClearable
+              isSearchable
+              value={
+                formData.size
+                  ? { label: formData.size, value: formData.size }
+                  : null
+              }
+              onChange={handleSizeChange}
+              placeholder="Search"
+              className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
               }`}
+              noOptionsMessage={() => "No size found"}
+              formatCreateLabel={(inputValue) =>
+                `Create new size: "${inputValue}"`
+              }
             />
           </div>
 
           <div>
-            <label htmlFor="color" className="block mb-1">
+            <label htmlFor="color" className="label-group">
               Color
             </label>
-            <input
-              type="text"
+            <CreatableSelect
               id="color"
               name="color"
-              value={formData.color}
-              onChange={handleChange}
-              placeholder="Color"
-              className={`p-2 border rounded w-full ${
+              options={colorOptions}
+              isClearable
+              isSearchable
+              value={
+                formData.color
+                  ? { label: formData.color, value: formData.color }
+                  : null
+              }
+              onChange={handleColorChange}
+              placeholder="Search"
+              className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
               }`}
+              noOptionsMessage={() => "No color found"}
+              formatCreateLabel={(inputValue) =>
+                `Create new color: "${inputValue}"`
+              }
             />
           </div>
 
           <div>
-            <label htmlFor="quantity" className="block mb-1">
+            <label htmlFor="quantity" className="label-group">
               Quantity
             </label>
             <input
@@ -263,14 +524,12 @@ const FormComponent: React.FC = () => {
               value={formData.quantity}
               onChange={handleChange}
               placeholder="Quantity"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
 
           <div>
-            <label htmlFor="weight" className="block mb-1">
+            <label htmlFor="weight" className="label-group">
               Weight
             </label>
             <input
@@ -280,31 +539,39 @@ const FormComponent: React.FC = () => {
               value={formData.weight}
               onChange={handleChange}
               placeholder="Weight"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
 
           <div>
-            <label htmlFor="remarks" className="block mb-1">
+            <label htmlFor="remarks" className="label-group">
               Remarks
             </label>
-            <input
-              type="text"
+            <CreatableSelect
               id="remarks"
               name="remarks"
-              value={formData.remarks}
-              onChange={handleChange}
-              placeholder="Remarks"
-              className={`p-2 border rounded w-full ${
+              options={remarkOptions}
+              isClearable
+              isSearchable
+              value={
+                formData.remarks
+                  ? { label: formData.remarks, value: formData.remarks }
+                  : null
+              }
+              onChange={handleRemarkChange}
+              placeholder="Search"
+              className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
               }`}
+              noOptionsMessage={() => "No remark found"}
+              formatCreateLabel={(inputValue) =>
+                `Create new remark: "${inputValue}"`
+              }
             />
           </div>
 
           <div>
-            <label htmlFor="quality" className="block mb-1">
+            <label htmlFor="quality" className="label-group">
               Quality
             </label>
             <input
@@ -314,43 +581,64 @@ const FormComponent: React.FC = () => {
               value={formData.quality}
               onChange={handleChange}
               placeholder="Quality"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
 
           <div>
-            <label htmlFor="shuttle_or_mat" className="block mb-1">
+            <label htmlFor="shuttle_or_mat" className="label-group">
               Shuttle or Mat
             </label>
-            <input
-              type="text"
+            <CreatableSelect
               id="shuttle_or_mat"
               name="shuttle_or_mat"
-              value={formData.shuttle_or_mat}
-              onChange={handleChange}
-              placeholder="Shuttle or Mat"
-              className={`p-2 border rounded w-full ${
+              options={shuttleOrMatOptions}
+              isClearable
+              isSearchable
+              value={
+                formData.shuttle_or_mat
+                  ? {
+                      label: formData.shuttle_or_mat,
+                      value: formData.shuttle_or_mat,
+                    }
+                  : null
+              }
+              onChange={handleShuttleOrMatChange}
+              placeholder="Search"
+              className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
               }`}
+              noOptionsMessage={() => "No company found"}
+              formatCreateLabel={(inputValue) =>
+                `Create new company: "${inputValue}"`
+              }
             />
           </div>
 
           <div>
-            <label htmlFor="receiving" className="block mb-1">
+            <label htmlFor="receiving" className="label-group">
               Receiving
             </label>
-            <input
-              type="text"
+            <CreatableSelect
               id="receiving"
               name="receiving"
-              value={formData.receiving}
-              onChange={handleChange}
-              placeholder="Receiving"
-              className={`p-2 border rounded w-full ${
+              options={receivingOptions}
+              isClearable
+              isSearchable
+              value={
+                formData.receiving
+                  ? { label: formData.receiving, value: formData.receiving }
+                  : null
+              }
+              onChange={handleReceivingChange}
+              placeholder="Search"
+              className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
               }`}
+              noOptionsMessage={() => "No receiving found"}
+              formatCreateLabel={(inputValue) =>
+                `Create new receiving: "${inputValue}"`
+              }
             />
           </div>
         </div>
@@ -379,7 +667,16 @@ const FormComponent: React.FC = () => {
           Upload CSV
         </button>
       </div>
-      <RawMaterialList productsData={productsData} loading={loading} />
+      <RawMaterialList
+        productsData={productsData}
+        loading={loading}
+        filters={filters}
+        setFilters={setFilters}
+        companies={companies}
+        shuttleOrMats={shuttleOrMats}
+        receivings={receivings}
+        filteredData={filteredData}
+      />
     </>
   );
 };

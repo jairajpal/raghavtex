@@ -22,98 +22,32 @@ interface ProductsData {
 interface ProductsDataProps {
   productsData: ProductsData[];
   loading: boolean;
+  filters: any;
+  setFilters: any;
+  companies: any;
+  shuttleOrMats: any;
+  receivings: any;
+  filteredData: any;
 }
 
 const RawMaterialList: React.FC<ProductsDataProps> = ({
   productsData,
   loading,
+  filters,
+  setFilters,
+  companies,
+  shuttleOrMats,
+  receivings,
+  filteredData,
 }) => {
   const { theme } = useTheme();
-
-  // Initialize filter state
-  const [filters, setFilters] = useState({
-    startDate: "",
-    endDate: "",
-    challan_no: "",
-    company: "",
-    design: "",
-    type: "",
-    size: "",
-    color: "",
-    quantity: "",
-    remarks: "",
-    quality: "",
-    shuttle_or_mat: "",
-    receiving: "",
-  });
-
-  // Extract unique values for dropdowns
-  const companies = useMemo(
-    () => Array.from(new Set(productsData.map((item) => item.company))),
-    [productsData]
-  );
-
-  const shuttleOrMatOptions = useMemo(
-    () => Array.from(new Set(productsData.map((item) => item.shuttle_or_mat))),
-    [productsData]
-  );
-
-  const receivingOptions = useMemo(
-    () => Array.from(new Set(productsData.map((item) => item.receiving))),
-    [productsData]
-  );
-
-  // Filtered data based on filters
-  const filteredData = useMemo(() => {
-    return productsData.filter((item) => {
-      const itemDate = new Date(item.date);
-      const startDate = filters.startDate ? new Date(filters.startDate) : null;
-      const endDate = filters.endDate ? new Date(filters.endDate) : null;
-
-      const isWithinDateRange =
-        (!startDate || itemDate >= startDate) &&
-        (!endDate || itemDate <= endDate);
-      return (
-        isWithinDateRange &&
-        (filters.challan_no
-          ? item.challan_no
-              .toLowerCase()
-              .includes(filters.challan_no.toLowerCase())
-          : true) &&
-        (filters.company ? item.company === filters.company : true) &&
-        (filters.design
-          ? item.design.toLowerCase().includes(filters.design.toLowerCase())
-          : true) &&
-        (filters.type
-          ? item.type.toLowerCase().includes(filters.type.toLowerCase())
-          : true) &&
-        (filters.size
-          ? item.size.toLowerCase().includes(filters.size.toLowerCase())
-          : true) &&
-        (filters.color
-          ? item.color.toLowerCase().includes(filters.color.toLowerCase())
-          : true) &&
-        (filters.quantity
-          ? item.quantity === Number(filters.quantity)
-          : true) &&
-        (filters.remarks
-          ? item.remarks.toLowerCase().includes(filters.remarks.toLowerCase())
-          : true) &&
-        (filters.quality ? item.quality === filters.quality : true) &&
-        (filters.shuttle_or_mat
-          ? item.shuttle_or_mat === filters.shuttle_or_mat
-          : true) &&
-        (filters.receiving ? item.receiving === filters.receiving : true)
-      );
-    });
-  }, [productsData, filters]);
 
   // Handle input changes
   const handleFilterChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFilters((prevFilters) => ({
+    setFilters((prevFilters: any) => ({
       ...prevFilters,
       [name]: value,
     }));
@@ -142,14 +76,14 @@ const RawMaterialList: React.FC<ProductsDataProps> = ({
           </tr>
           {/* Filter Inputs */}
           <tr>
-            <th className="tableData px-2 py-1 border">
+            <th className="tableData ">
               <div className="flex flex-col space-y-1">
                 <input
                   type="date"
                   name="startDate"
                   value={filters.startDate}
                   onChange={handleFilterChange}
-                  className={`p-2 border rounded w-full ${
+                  className={`input-group ${
                     theme === "dark" ? "dark" : "light"
                   }`}
                   placeholder="From"
@@ -159,7 +93,7 @@ const RawMaterialList: React.FC<ProductsDataProps> = ({
                   name="endDate"
                   value={filters.endDate}
                   onChange={handleFilterChange}
-                  className={`p-2 border rounded w-full ${
+                  className={`input-group ${
                     theme === "dark" ? "dark" : "light"
                   }`}
                   placeholder="To"
@@ -167,140 +101,120 @@ const RawMaterialList: React.FC<ProductsDataProps> = ({
               </div>
             </th>
 
-            <th className="tableData px-2 py-1 border">
+            <th className="tableData ">
               <input
                 type="text"
                 name="challan_no"
                 value={filters.challan_no}
                 onChange={handleFilterChange}
                 placeholder="Search..."
-                className={`p-2 border rounded w-full ${
-                  theme === "dark" ? "dark" : "light"
-                }`}
+                className={`input-group ${theme === "dark" ? "dark" : "light"}`}
               />
             </th>
-            <th className="tableData px-2 py-1 border">
+            <th className="tableData ">
               <select
                 name="company"
                 value={filters.company}
                 onChange={handleFilterChange}
-                className={`p-2 border rounded w-full ${
-                  theme === "dark" ? "dark" : "light"
-                }`}
+                className={`input-group ${theme === "dark" ? "dark" : "light"}`}
               >
                 <option value="">All</option>
-                {companies.map((company) => (
+                {companies.map((company: any) => (
                   <option key={company} value={company}>
                     {company}
                   </option>
                 ))}
               </select>
             </th>
-            <th className="tableData px-2 py-1 border">
+            <th className="tableData ">
               <input
                 name="design"
                 value={filters.design}
                 onChange={handleFilterChange}
                 placeholder="Search..."
-                className={`p-2 border rounded w-full ${
-                  theme === "dark" ? "dark" : "light"
-                }`}
+                className={`input-group ${theme === "dark" ? "dark" : "light"}`}
               />
             </th>
-            <th className="tableData px-2 py-1 border">
+            <th className="tableData ">
               <input
                 name="type"
                 value={filters.type}
                 onChange={handleFilterChange}
                 placeholder="Search..."
-                className={`p-2 border rounded w-full ${
-                  theme === "dark" ? "dark" : "light"
-                }`}
+                className={`input-group ${theme === "dark" ? "dark" : "light"}`}
               />
             </th>
-            <th className="tableData px-2 py-1 border">
+            <th className="tableData ">
               <input
                 name="size"
                 value={filters.size}
                 onChange={handleFilterChange}
                 placeholder="Search..."
-                className={`p-2 border rounded w-full ${
-                  theme === "dark" ? "dark" : "light"
-                }`}
+                className={`input-group ${theme === "dark" ? "dark" : "light"}`}
               />
             </th>
-            <th className="tableData px-2 py-1 border">
+            <th className="tableData ">
               <input
                 name="color"
                 value={filters.color}
                 onChange={handleFilterChange}
                 placeholder="Search..."
-                className={`p-2 border rounded w-full ${
-                  theme === "dark" ? "dark" : "light"
-                }`}
+                className={`input-group ${theme === "dark" ? "dark" : "light"}`}
               />
             </th>
-            <th className="tableData px-2 py-1 border">
+            <th className="tableData ">
               <input
                 type="number"
                 name="quantity"
                 value={filters.quantity}
                 onChange={handleFilterChange}
                 placeholder="Search..."
-                className={`p-2 border rounded w-full ${
-                  theme === "dark" ? "dark" : "light"
-                }`}
+                className={`input-group ${theme === "dark" ? "dark" : "light"}`}
               />
             </th>
-            <th className="tableData px-2 py-1 border"></th>
-            <th className="tableData px-2 py-1 border">
+            <th className="tableData "></th>
+            <th className="tableData ">
               <input
                 type="text"
                 name="remarks"
                 value={filters.remarks}
                 onChange={handleFilterChange}
                 placeholder="Search..."
-                className={`p-2 border rounded w-full ${
-                  theme === "dark" ? "dark" : "light"
-                }`}
+                className={`input-group ${theme === "dark" ? "dark" : "light"}`}
               />
             </th>
-            <th className="tableData px-2 py-1 border"></th>
-            <th className="tableData px-2 py-1 border">
+            <th className="tableData "></th>
+            <th className="tableData ">
               <select
                 name="shuttle_or_mat"
                 value={filters.shuttle_or_mat}
                 onChange={handleFilterChange}
-                className={`p-2 border rounded w-full ${
-                  theme === "dark" ? "dark" : "light"
-                }`}
+                className={`input-group ${theme === "dark" ? "dark" : "light"}`}
               >
                 <option value="">All</option>
-                {shuttleOrMatOptions.map((option) => (
+                {shuttleOrMats.map((option: any) => (
                   <option key={option} value={option}>
                     {option}
                   </option>
                 ))}
               </select>
             </th>
-            <th className="tableData px-2 py-1 border">
+            <th className="tableData ">
               <select
                 name="receiving"
                 value={filters.receiving}
                 onChange={handleFilterChange}
-                className={`p-2 border rounded w-full ${
-                  theme === "dark" ? "dark" : "light"
-                }`}
+                className={`input-group ${theme === "dark" ? "dark" : "light"}`}
               >
                 <option value="">All</option>
-                {receivingOptions.map((receiving) => (
+                {receivings.map((receiving: any) => (
                   <option key={receiving} value={receiving}>
                     {receiving}
                   </option>
                 ))}
               </select>
             </th>
-            <th className="tableData px-2 py-1 border"></th>
+            <th className="tableData "></th>
           </tr>
         </thead>
         <tbody>
@@ -311,7 +225,7 @@ const RawMaterialList: React.FC<ProductsDataProps> = ({
               </td>
             </tr>
           ) : filteredData.length > 0 ? (
-            filteredData.map((item, index) => (
+            filteredData.map((item: any, index: any) => (
               <tr key={index} className="">
                 <td className="tableData">{item.date}</td>
                 <td className="tableData">{item.challan_no}</td>

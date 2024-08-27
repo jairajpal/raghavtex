@@ -29,7 +29,7 @@ const CompanyFormComponent: React.FC = () => {
       <form className="space-y-4 p-4">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div>
-            <label htmlFor="date" className="block mb-1">
+            <label htmlFor="date" className="label-group">
               Date
             </label>
             <input
@@ -38,13 +38,11 @@ const CompanyFormComponent: React.FC = () => {
               name="date"
               value={formData.date}
               //   onChange={handleChange}
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="name" className="block mb-1">
+            <label htmlFor="name" className="label-group">
               Comapny Name
             </label>
             <input
@@ -54,13 +52,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.name}
               //   onChange={handleChange}
               placeholder="Name"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="gstNo" className="block mb-1">
+            <label htmlFor="gstNo" className="label-group">
               GST no.
             </label>
             <input
@@ -70,13 +66,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.gstNo}
               //   onChange={handleChange}
               placeholder="Gst No"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="phoneNo" className="block mb-1">
+            <label htmlFor="phoneNo" className="label-group">
               Phone Number
             </label>
             <input
@@ -86,13 +80,11 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.phoneNo}
               //   onChange={handleChange}
               placeholder="Phone Number"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
           <div>
-            <label htmlFor="remarks" className="block mb-1">
+            <label htmlFor="remarks" className="label-group">
               Remarks
             </label>
             <input
@@ -102,9 +94,7 @@ const CompanyFormComponent: React.FC = () => {
               value={formData.remarks}
               //   onChange={handleChange}
               placeholder="Remarks"
-              className={`p-2 border rounded w-full ${
-                theme === "dark" ? "dark" : "light"
-              }`}
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
         </div>
