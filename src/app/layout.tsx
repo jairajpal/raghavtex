@@ -30,15 +30,15 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <ThemeProvider>
-            <header className="flex-none h-[15%]">
+            <header className="flex-none">
               <Header />
             </header>
             <div className="flex flex-col h-screen">
-              <main className="flex-grow relative h-[60%]">{children}</main>
+              <main className="flex-grow relative h-[100%]">{children}</main>
             </div>
-            <footer className="flex flex-none h-[5%]">
-              {/* <Footer /> */}
-            </footer>
+            {/* <footer className="flex flex-none">
+              <Footer />
+            </footer> */}
             {/* <TestComponent /> */}
           </ThemeProvider>
         </AuthProvider>

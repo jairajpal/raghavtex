@@ -64,9 +64,9 @@ const RawMaterialList: React.FC<ProductsDataProps> = ({
   useEffect(() => {}, [filteredData]);
 
   return (
-    <div className="overflow-x-auto p-4 max-h-[800px] overflow-y-auto">
-      <table className="min-w-full border">
-        <thead className={"sticky top-0 z-10 " + theme}>
+    <div className="overflow-x-auto max-h-[580px]">
+      <table className="min-w-full table-fixed">
+        <thead className={"sticky top-0 z-0 border " + theme}>
           {/* Header Titles */}
           <tr>
             <th className="tableData w-11">Date</th>

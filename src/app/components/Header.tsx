@@ -5,11 +5,15 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import axiosInstance from "@/utils/axiosInstance";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const Header = () => {
   const { isAuthenticated, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isInventoryManagementActive = pathname === "/raw-material";
+  const isTanaActive = pathname === "/tana";
 
   console.log("isAuthenticated: Header", isAuthenticated);
 
@@ -82,17 +86,21 @@ const Header = () => {
         <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
           {isAuthenticated && (
             <>
-              <Link href="/raw-material" className="mr-5 hover:text-gray-500">
+              <Link
+                href="/raw-material"
+                className={`mr-5 hover:text-gray-500 transform transition-transform duration-300 ${
+                  isInventoryManagementActive ? "text-xl" : ""
+                }`}
+              >
                 Inventory Management
               </Link>
-              <Link href="/company" className="mr-5 hover:text-gray-500">
-                Company
-              </Link>
-              <Link href="/tana" className="mr-5 hover:text-gray-500">
+              <Link
+                href="/tana"
+                className={`mr-5 hover:text-gray-500 transform transition-transform duration-300 ${
+                  isTanaActive ? "text-xl" : ""
+                }`}
+              >
                 Tana
-              </Link>
-              <Link href="/fourth" className="mr-5 hover:text-gray-500">
-                Fourth Link
               </Link>
             </>
           )}

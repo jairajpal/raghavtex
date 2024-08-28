@@ -355,12 +355,16 @@ const FormComponent: React.FC = () => {
     formData.append("file", csvFile);
 
     try {
-      const response = await axiosInstance.post("/api/upload/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "X-CSRFToken": getCSRFToken(),
-        },
-      });
+      const response = await axiosInstance.post(
+        "/api/products/upload/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "X-CSRFToken": getCSRFToken(),
+          },
+        }
+      );
       console.log("CSV upload response:", response);
       await fetchData(); // Reload the data after successful upload
     } catch (error) {
@@ -405,7 +409,7 @@ const FormComponent: React.FC = () => {
         </button>
       </div>
 
-      <div className="space-y-4 p-4">
+      <div className="space-y-4 p-4 h-100">
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
           <div>
             <label htmlFor="date" className="label-group">

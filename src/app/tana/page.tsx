@@ -1,14 +1,18 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTheme } from "../components/ThemeContext";
 import "../../../styles/globals.css"; // Ensure your global styles are imported
 import { TanaList } from "../components/TanaList";
+import axiosInstance from "@/utils/axiosInstance";
+import { getCSRFToken } from "@/utils/tools";
 
 interface FormData {
+  id: string;
   date: string;
   loomNo: string;
   company: string;
-  design_type: string;
+  design: string;
+  type: string;
   warp: string;
   warpColor: string;
   weft: string;
@@ -23,10 +27,12 @@ interface FormData {
 }
 
 const initialFormData: FormData = {
+  id: "",
   date: "",
   loomNo: "",
   company: "",
-  design_type: "",
+  design: "",
+  type: "",
   warp: "",
   warpColor: "",
   weft: "",
@@ -43,6 +49,336 @@ const initialFormData: FormData = {
 const CompanyFormComponent: React.FC = () => {
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const { theme } = useTheme();
+  const [loomData, setLoomData] = useState<FormData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [csvFile, setCsvFile] = useState<File | null>(null);
+
+  const [filters, setFilters] = useState({
+    startDate: "",
+    endDate: "",
+    date: "",
+    loomNo: "",
+    company: "",
+    design: "",
+    type: "",
+    warp: "",
+    warpColor: "",
+    weft: "",
+    weftColor: "",
+    widthInch: "",
+    lengthMeter: "",
+    threadCount: "",
+    reed: "",
+    bOrM: "",
+    dentThread: "",
+    remarks: "",
+  });
+  // Extract unique values for dropdowns
+
+  const looms = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.loomNo))),
+    [loomData]
+  );
+
+  const companies = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.company))),
+    [loomData]
+  );
+
+  const companyOptions = companies.map((company) => ({
+    label: company,
+    value: company,
+  }));
+
+  const handleCompanyChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "company",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+  const designs = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.design))),
+    [loomData]
+  );
+
+  const designOptions = designs.map((design) => ({
+    label: design,
+    value: design,
+  }));
+
+  const handleDesignChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "design",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const types = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.type))),
+    [loomData]
+  );
+
+  const typeOptions = types.map((type) => ({
+    label: type,
+    value: type,
+  }));
+
+  const handleTypeChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "type",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const warps = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.warp))),
+    [loomData]
+  );
+
+  const warpOptions = warps.map((warp) => ({
+    label: warp,
+    value: warp,
+  }));
+
+  const handleWarpChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "warp",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const warpColors = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.warpColor))),
+    [loomData]
+  );
+
+  const warpColorOptions = warpColors.map((warpColor) => ({
+    label: warpColor,
+    value: warpColor,
+  }));
+
+  const handleWarpColorChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "warpColor",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const wefts = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.weft))),
+    [loomData]
+  );
+
+  const weftOptions = wefts.map((weft) => ({
+    label: weft,
+    value: weft,
+  }));
+
+  const handleWeftChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "weft",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const weftColors = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.weftColor))),
+    [loomData]
+  );
+
+  const weftColorOptions = weftColors.map((weftColor) => ({
+    label: weftColor,
+    value: weftColor,
+  }));
+
+  const handleWeftColorChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "weftColor",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const widthInchOptions = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.widthInch))),
+    [loomData]
+  ).map((widthInch) => ({
+    label: widthInch.toString(),
+    value: widthInch,
+  }));
+
+  const lengthMeterOptions = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.lengthMeter))),
+    [loomData]
+  ).map((lengthMeter) => ({
+    label: lengthMeter.toString(),
+    value: lengthMeter,
+  }));
+
+  const threadCountOptions = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.threadCount))),
+    [loomData]
+  ).map((threadCount) => ({
+    label: threadCount.toString(),
+    value: threadCount,
+  }));
+
+  const reedOptions = useMemo(
+    () => Array.from(new Set(loomData.map((item) => item.reed))),
+    [loomData]
+  ).map((reed) => ({
+    label: reed,
+    value: reed,
+  }));
+
+  const handleWidthInchChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "widthInch",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const handleLengthMeterChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "lengthMeter",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const handleThreadCountChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "threadCount",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const handleReedChange = (selectedOption: any) => {
+    handleChange({
+      target: {
+        name: "reed",
+        value: selectedOption ? selectedOption.value : "",
+      },
+    });
+  };
+
+  const handleCsvUpload = async () => {
+    if (!csvFile) return;
+
+    const formData = new FormData();
+    formData.append("file", csvFile);
+
+    try {
+      const response = await axiosInstance.post(
+        "/api/looms/upload/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "X-CSRFToken": getCSRFToken(),
+          },
+        }
+      );
+      await fetchData(); // Reload the data after successful upload
+    } catch (error) {
+      console.error("Error uploading CSV:", error);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setCsvFile(e.target.files[0]);
+    }
+  };
+
+  const filteredData = useMemo(() => {
+    return loomData.filter((item) => {
+      const itemDate = new Date(item.date);
+      const startDate = filters.startDate ? new Date(filters.startDate) : null;
+      const endDate = filters.endDate ? new Date(filters.endDate) : null;
+
+      const isWithinDateRange =
+        (!startDate || itemDate >= startDate) &&
+        (!endDate || itemDate <= endDate);
+      return (
+        isWithinDateRange &&
+        (filters.loomNo ? item.loomNo === filters.loomNo : true) &&
+        (filters.company ? item.company === filters.company : true) &&
+        (filters.design
+          ? item.design.toLowerCase().includes(filters.design.toLowerCase())
+          : true) &&
+        (filters.type
+          ? item.type.toLowerCase().includes(filters.type.toLowerCase())
+          : true) &&
+        (filters.warp
+          ? item.warp.toLowerCase().includes(filters.warp.toLowerCase())
+          : true) &&
+        (filters.warpColor
+          ? item.warpColor
+              .toLowerCase()
+              .includes(filters.warpColor.toLowerCase())
+          : true) &&
+        (filters.weft
+          ? item.weft.toLowerCase().includes(filters.weft.toLowerCase())
+          : true) &&
+        (filters.weftColor
+          ? item.weftColor
+              .toLowerCase()
+              .includes(filters.weftColor.toLowerCase())
+          : true) &&
+        (filters.widthInch
+          ? item.widthInch
+              .toLowerCase()
+              .includes(filters.widthInch.toLowerCase())
+          : true) &&
+        (filters.lengthMeter
+          ? item.lengthMeter
+              .toLowerCase()
+              .includes(filters.lengthMeter.toLowerCase())
+          : true) &&
+        (filters.threadCount
+          ? item.threadCount
+              .toLowerCase()
+              .includes(filters.threadCount.toLowerCase())
+          : true) &&
+        (filters.reed
+          ? item.reed.toLowerCase().includes(filters.reed.toLowerCase())
+          : true) &&
+        (filters.remarks
+          ? item.remarks.toLowerCase().includes(filters.remarks.toLowerCase())
+          : true) &&
+        (filters.bOrM ? item.bOrM === filters.bOrM : true)
+      );
+    });
+  }, [loomData, filters]);
+  console.log("filters: ", filters);
+
+  const onUpdate = (newValue: any) => {
+    setFormData(newValue);
+  };
+
+  const onDelete = (id: any) => {
+    const updated: any = loomData.filter((item) => item.id !== id);
+    setFormData(updated);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,9 +388,56 @@ const CompanyFormComponent: React.FC = () => {
     }));
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    let response: any = {};
+    if (!formData.id) {
+      response = await axiosInstance.post("/api/looms/", formData, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken(),
+        },
+      });
+    } else {
+      await axiosInstance.put("/api/looms/" + formData.id + "/", formData, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken(),
+        },
+      });
+    }
+    fetchData();
+  };
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get("/api/looms/", {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken(),
+        },
+      });
+      setLoomData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clear = () => {
+    setFormData(initialFormData);
+    return;
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
-      <form className="space-y-4 p-4">
+      <div className="space-y-4 p-4">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div>
             <label htmlFor="date" className="label-group">
@@ -267,10 +650,43 @@ const CompanyFormComponent: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center justify-center">
-          <button className="btn">Save</button>
+          <button className="btn" onClick={handleSubmit}>
+            Save
+          </button>
+          <button onClick={clear} className="btn ml-4">
+            Clear
+          </button>
         </div>
-      </form>
-      <TanaList />
+      </div>
+      <div className="flex justify-end mb-4">
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleFileChange}
+          className="hidden"
+          id="upload-csv"
+        />
+        <label htmlFor="upload-csv" className="btn">
+          Choose CSV File
+        </label>
+        <button
+          onClick={handleCsvUpload}
+          className="btn ml-2 mr-6"
+          disabled={!csvFile}
+        >
+          Upload CSV
+        </button>
+      </div>
+      <TanaList
+        loading={loading}
+        filters={filters}
+        setFilters={setFilters}
+        companies={companies}
+        onUpdate={onUpdate}
+        deleteRow={onDelete}
+        filteredData={filteredData}
+        looms={looms}
+      />
     </>
   );
 };
