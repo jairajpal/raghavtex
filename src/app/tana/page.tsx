@@ -287,16 +287,12 @@ const CompanyFormComponent: React.FC = () => {
     formData.append("file", csvFile);
 
     try {
-      const response = await axiosInstance.post(
-        "/api/looms/upload/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "X-CSRFToken": getCSRFToken(),
-          },
-        }
-      );
+      await axiosInstance.post("/api/looms/upload/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "X-CSRFToken": getCSRFToken(),
+        },
+      });
       await fetchData(); // Reload the data after successful upload
     } catch (error) {
       console.error("Error uploading CSV:", error);
