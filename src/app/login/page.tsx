@@ -1,17 +1,21 @@
 "use client";
-import { useForm } from "react-hook-form";
-import axios from "axios";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import "../../../styles/globals.css";
 import Image from "next/image";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useEffect } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 
+type FormData = {
+  email: string;
+  password: string;
+};
+
 const LoginPage = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormData>();
   const { isAuthenticated, login } = useAuth();
+  const router = useRouter();
 
   const getCSRFToken = () => {
     const csrfCookie = document.cookie
@@ -21,9 +25,7 @@ const LoginPage = () => {
     return csrfCookie;
   };
 
-  const router = useRouter();
-
-  const onSubmit = async (data: { email: string; password: string }) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       const response = await axiosInstance.post("/api/login/", data, {
         headers: {
@@ -31,7 +33,6 @@ const LoginPage = () => {
           "X-CSRFToken": getCSRFToken(),
         },
       });
-      // check if the user is authenticated
       login();
       router.push("/home");
     } catch (error) {
@@ -42,7 +43,7 @@ const LoginPage = () => {
   return (
     <section className="dark body-font">
       <Image
-        src="/homeImg.jpg" // Replace with your image path
+        src="/homeImg.jpg"
         alt="Background"
         fill
         style={{ objectFit: "cover" }}

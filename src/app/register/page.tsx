@@ -1,16 +1,28 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import Link from "next/link";
 import "../../../styles/globals.css"; // Ensure your global styles are imported
 import Image from "next/image";
+import axiosInstance from "@/utils/axiosInstance";
+import { getCSRFToken } from "@/utils/tools";
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 const Register = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormData>();
 
-  const onSubmit = async (data: { email: string; password: string }) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      await axios.post("/api/register", data);
+      const response = await axiosInstance.post("/api/register/", data, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken(),
+        },
+      });
       alert("User registered successfully");
     } catch (error) {
       console.error("Error registering user", error);

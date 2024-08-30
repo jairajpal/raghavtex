@@ -104,14 +104,14 @@ const FormComponent: React.FC = () => {
     value: company,
   }));
 
-  const handleCompanyChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "company",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleCompanyChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "company",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const designs = useMemo(
     () => Array.from(new Set(productsData.map((item) => item.design))),
@@ -123,14 +123,14 @@ const FormComponent: React.FC = () => {
     value: design,
   }));
 
-  const handleDesignChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "design",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleDesignChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "design",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const types = useMemo(
     () => Array.from(new Set(productsData.map((item) => item.type))),
@@ -142,14 +142,14 @@ const FormComponent: React.FC = () => {
     value: type,
   }));
 
-  const handleTypeChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "type",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleTypeChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "type",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const colors = useMemo(
     () => Array.from(new Set(productsData.map((item) => item.color))),
@@ -161,14 +161,14 @@ const FormComponent: React.FC = () => {
     value: color,
   }));
 
-  const handleColorChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "color",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleColorChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "color",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const sizes = useMemo(
     () => Array.from(new Set(productsData.map((item) => item.size))),
@@ -180,14 +180,14 @@ const FormComponent: React.FC = () => {
     value: size,
   }));
 
-  const handleSizeChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "size",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleSizeChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "size",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const remarks = useMemo(
     () => Array.from(new Set(productsData.map((item) => item.remarks))),
@@ -199,14 +199,14 @@ const FormComponent: React.FC = () => {
     value: remark,
   }));
 
-  const handleRemarkChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "remarks",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleRemarkChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "remarks",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const shuttleOrMats = useMemo(
     () => Array.from(new Set(productsData.map((item) => item.shuttle_or_mat))),
@@ -218,14 +218,14 @@ const FormComponent: React.FC = () => {
     value: shuttle_or_mat,
   }));
 
-  const handleShuttleOrMatChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "shuttle_or_mat",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleShuttleOrMatChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "shuttle_or_mat",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const receivings = useMemo(
     () => Array.from(new Set(productsData.map((item) => item.receiving))),
@@ -237,13 +237,22 @@ const FormComponent: React.FC = () => {
     value: receiving,
   }));
 
-  const handleReceivingChange = (selectedOption: any) => {
+  // const handleReceivingChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "receiving",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
+
+  const handleSelectChange = (name: any) => (selectedOption: any) => {
     handleChange({
       target: {
-        name: "receiving",
+        name,
         value: selectedOption ? selectedOption.value : "",
       },
-    });
+    } as any);
   };
 
   // Filtered data based on filters
@@ -455,7 +464,7 @@ const FormComponent: React.FC = () => {
                   ? { label: formData.company, value: formData.company }
                   : null
               }
-              onChange={handleCompanyChange}
+              onChange={handleSelectChange("company")}
               placeholder="Search"
               className={`p-0 border rounded w-full z-auto${
                 theme === "dark" ? "dark" : "light"
@@ -482,7 +491,7 @@ const FormComponent: React.FC = () => {
                   ? { label: formData.design, value: formData.design }
                   : null
               }
-              onChange={handleDesignChange}
+              onChange={handleSelectChange("design")}
               placeholder="Search"
               className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
@@ -509,7 +518,7 @@ const FormComponent: React.FC = () => {
                   ? { label: formData.type, value: formData.type }
                   : null
               }
-              onChange={handleTypeChange}
+              onChange={handleSelectChange("type")}
               placeholder="Search"
               className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
@@ -536,7 +545,7 @@ const FormComponent: React.FC = () => {
                   ? { label: formData.size, value: formData.size }
                   : null
               }
-              onChange={handleSizeChange}
+              onChange={handleSelectChange("size")}
               placeholder="Search"
               className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
@@ -563,7 +572,7 @@ const FormComponent: React.FC = () => {
                   ? { label: formData.color, value: formData.color }
                   : null
               }
-              onChange={handleColorChange}
+              onChange={handleSelectChange("color")}
               placeholder="Search"
               className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
@@ -620,7 +629,7 @@ const FormComponent: React.FC = () => {
                   ? { label: formData.remarks, value: formData.remarks }
                   : null
               }
-              onChange={handleRemarkChange}
+              onChange={handleSelectChange("remarks")}
               placeholder="Search"
               className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
@@ -650,7 +659,7 @@ const FormComponent: React.FC = () => {
                     }
                   : null
               }
-              onChange={handleShuttleOrMatChange}
+              onChange={handleSelectChange("shuttle_or_mat")}
               placeholder="Search"
               className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"
@@ -677,7 +686,7 @@ const FormComponent: React.FC = () => {
                   ? { label: formData.receiving, value: formData.receiving }
                   : null
               }
-              onChange={handleReceivingChange}
+              onChange={handleSelectChange("receiving")}
               placeholder="Search"
               className={`p-0 border rounded w-full ${
                 theme === "dark" ? "dark" : "light"

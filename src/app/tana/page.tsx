@@ -85,132 +85,133 @@ const CompanyFormComponent: React.FC = () => {
     [loomData]
   );
 
-  const companyOptions = companies.map((company) => ({
-    label: company,
-    value: company,
-  }));
+  // const companyOptions = companies.map((company) => ({
+  //   label: company,
+  //   value: company,
+  // }));
 
-  const handleCompanyChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "company",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleCompanyChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "company",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
+
   const designs = useMemo(
     () => Array.from(new Set(loomData.map((item) => item.design))),
     [loomData]
   );
 
-  const designOptions = designs.map((design) => ({
-    label: design,
-    value: design,
-  }));
+  // const designOptions = designs.map((design) => ({
+  //   label: design,
+  //   value: design,
+  // }));
 
-  const handleDesignChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "design",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleDesignChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "design",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const types = useMemo(
     () => Array.from(new Set(loomData.map((item) => item.type))),
     [loomData]
   );
 
-  const typeOptions = types.map((type) => ({
-    label: type,
-    value: type,
-  }));
+  // const typeOptions = types.map((type) => ({
+  //   label: type,
+  //   value: type,
+  // }));
 
-  const handleTypeChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "type",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleTypeChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "type",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const warps = useMemo(
     () => Array.from(new Set(loomData.map((item) => item.warp))),
     [loomData]
   );
 
-  const warpOptions = warps.map((warp) => ({
-    label: warp,
-    value: warp,
-  }));
+  // const warpOptions = warps.map((warp) => ({
+  //   label: warp,
+  //   value: warp,
+  // }));
 
-  const handleWarpChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "warp",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleWarpChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "warp",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const warpColors = useMemo(
     () => Array.from(new Set(loomData.map((item) => item.warpColor))),
     [loomData]
   );
 
-  const warpColorOptions = warpColors.map((warpColor) => ({
-    label: warpColor,
-    value: warpColor,
-  }));
+  // const warpColorOptions = warpColors.map((warpColor) => ({
+  //   label: warpColor,
+  //   value: warpColor,
+  // }));
 
-  const handleWarpColorChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "warpColor",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleWarpColorChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "warpColor",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const wefts = useMemo(
     () => Array.from(new Set(loomData.map((item) => item.weft))),
     [loomData]
   );
 
-  const weftOptions = wefts.map((weft) => ({
-    label: weft,
-    value: weft,
-  }));
+  // const weftOptions = wefts.map((weft) => ({
+  //   label: weft,
+  //   value: weft,
+  // }));
 
-  const handleWeftChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "weft",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleWeftChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "weft",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const weftColors = useMemo(
     () => Array.from(new Set(loomData.map((item) => item.weftColor))),
     [loomData]
   );
 
-  const weftColorOptions = weftColors.map((weftColor) => ({
-    label: weftColor,
-    value: weftColor,
-  }));
+  // const weftColorOptions = weftColors.map((weftColor) => ({
+  //   label: weftColor,
+  //   value: weftColor,
+  // }));
 
-  const handleWeftColorChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "weftColor",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleWeftColorChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "weftColor",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const widthInchOptions = useMemo(
     () => Array.from(new Set(loomData.map((item) => item.widthInch))),
@@ -244,41 +245,41 @@ const CompanyFormComponent: React.FC = () => {
     value: reed,
   }));
 
-  const handleWidthInchChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "widthInch",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleWidthInchChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "widthInch",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
-  const handleLengthMeterChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "lengthMeter",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleLengthMeterChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "lengthMeter",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
-  const handleThreadCountChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "threadCount",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleThreadCountChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "threadCount",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
-  const handleReedChange = (selectedOption: any) => {
-    handleChange({
-      target: {
-        name: "reed",
-        value: selectedOption ? selectedOption.value : "",
-      },
-    });
-  };
+  // const handleReedChange = (selectedOption: any) => {
+  //   handleChange({
+  //     target: {
+  //       name: "reed",
+  //       value: selectedOption ? selectedOption.value : "",
+  //     },
+  //   });
+  // };
 
   const handleCsvUpload = async () => {
     if (!csvFile) return;
@@ -477,16 +478,30 @@ const CompanyFormComponent: React.FC = () => {
             />
           </div>
           <div>
-            <label htmlFor="design_type" className="label-group">
-              Design Type
+            <label htmlFor="design" className="label-group">
+              Design
             </label>
             <input
               type="text"
-              id="design_type"
-              name="design_type"
-              value={formData.design_type}
+              id="design"
+              name="design"
+              value={formData.design}
               onChange={handleChange}
-              placeholder="Design Type"
+              placeholder="Design"
+              className={`input-group ${theme === "dark" ? "dark" : "light"}`}
+            />
+          </div>
+          <div>
+            <label htmlFor="type" className="label-group">
+              Type
+            </label>
+            <input
+              type="text"
+              id="type"
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              placeholder="Type"
               className={`input-group ${theme === "dark" ? "dark" : "light"}`}
             />
           </div>
