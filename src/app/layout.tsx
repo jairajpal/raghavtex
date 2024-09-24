@@ -3,6 +3,8 @@ import Footer from "./components/Footer";
 import "../../styles/globals.css"; // Ensure your global styles are imported
 import { ThemeProvider } from "../app/components/ThemeContext"; // Adjust path as needed
 import { AuthProvider } from "../../contexts/AuthContext";
+import { ErrorProvider } from "../contexts/ErrorContext";
+import ErrorNotification from "./components/ErrorNotification";
 
 export const metadata = {
   title: "Your App Title",
@@ -28,20 +30,23 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <AuthProvider>
-          <ThemeProvider>
-            <header className="flex-none">
-              <Header />
-            </header>
-            <div className="flex flex-col h-screen">
-              <main className="flex-grow relative h-[100%]">{children}</main>
-            </div>
-            {/* <footer className="flex flex-none">
+        <ErrorProvider>
+          <AuthProvider>
+            <ThemeProvider>
+              <ErrorNotification />
+              <header className="flex-none">
+                <Header />
+              </header>
+              <div className="flex flex-col h-screen">
+                <main className="flex-grow relative h-[100%]">{children}</main>
+              </div>
+              {/* <footer className="flex flex-none">
               <Footer />
             </footer> */}
-            {/* <TestComponent /> */}
-          </ThemeProvider>
-        </AuthProvider>
+              {/* <TestComponent /> */}
+            </ThemeProvider>
+          </AuthProvider>
+        </ErrorProvider>
       </body>
     </html>
   );
