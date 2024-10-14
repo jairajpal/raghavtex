@@ -6,36 +6,25 @@ const ThemeToggleButton: React.FC = () => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <button
-      className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-400 rounded text-base mt-4 md:mt-0"
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-    >
-      {theme === "light" ? (
-        <svg
-          fill="none"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          className="w-4 h-4"
-          viewBox="0 0 24 24"
-        >
-          <path d="M12 3v3M12 18v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M3 12h3m15 0h3m-4.22-7.78l-2.12 2.12M6.34 17.66l-2.12 2.12"></path>
-        </svg>
-      ) : (
-        <svg
-          fill="none"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          className="w-4 h-4"
-          viewBox="0 0 24 24"
-        >
-          <path d="M12 4v8m0 0v8m0-8H4m8 0h8"></path>
-        </svg>
-      )}
-    </button>
+    <>
+      <span className="px-2">Day</span>
+      <button
+        className={`relative inline-flex items-center justify-center w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none ${
+          theme === "light" ? "bg-gray-300" : "bg-gray-600"
+        }`}
+        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      >
+        <span
+          className={`w-4 h-4 rounded-full transition-transform duration-300 transform ${
+            theme === "light"
+              ? "-translate-x-3 bg-white"
+              : "translate-x-3 bg-yellow-500"
+          }`}
+        ></span>
+        <span className="sr-only">Toggle Theme</span>
+      </button>
+      <span className="px-2">Night</span>
+    </>
   );
 };
 

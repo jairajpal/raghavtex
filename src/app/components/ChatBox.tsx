@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useTheme } from "./ThemeContext";
 
-// Define the shape of a message object
 interface Message {
   id: number;
   sender_id: number;
@@ -11,10 +11,11 @@ interface Message {
 }
 
 interface ChatBoxProps {
-  socket: any; // You can provide a specific type here if needed
-  room: any; // You can provide a specific type here if needed
+  socket: any;
+  room: any;
   sendMessage: (input: any) => void;
-  messages: Message[]; // Array of message objects
+  messages: Message[];
+  profile: any;
 }
 
 const ChatBox: React.FC<ChatBoxProps> = ({
@@ -22,32 +23,29 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   room,
   sendMessage,
   messages,
+  profile,
 }) => {
-  const [input, setInput] = useState(""); // State for handling input
-  const yourSenderId = 7;
+  const { theme } = useTheme();
+  const [input, setInput] = useState("");
+  const yourSenderId = profile?.id;
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim()) {
-      console.log("input:>>>>>>>>>>>> ", input);
-      sendMessage(input); // Call the sendMessage function passed as a prop
-      setInput(""); // Clear input field after sending
+      sendMessage(input);
+      setInput("");
     }
   };
 
   useEffect(() => {
-    console.log("room: ", room);
     return () => {};
   }, [room]);
 
   return (
     <div className="w-2/4 flex flex-col">
-      <div className="flex-1 flex flex-col p-4 bg-red-500 shadow rounded-lg overflow-y-scroll">
-        {/* Chat Header */}
+      <div className="flex-1 flex flex-col p-4 bg-red-950 shadow rounded-lg overflow-y-scroll">
         <div className="flex flex-col p-4 bg-red-900 shadow rounded-lg overflow-y-scroll">
-          <div className="text-4xl">Room Name: {room.chatName}</div>
+          <div className="text-4xl">{room.chatName}</div>
         </div>
-
-        {/* Messages List */}
         <div className="flex-1 mt-4 h-[400px] overflow-y-auto flex flex-col-reverse">
           {messages.length ? (
             messages?.map((msg) => (
@@ -63,37 +61,48 @@ const ChatBox: React.FC<ChatBoxProps> = ({
                   }`}
                 ></div>
                 <div
-                  className={`ml-3 ${
-                    msg.sender_id === yourSenderId ? "text-right" : "text-left"
+                  className={`ml-3 border p-2 rounded-md ${
+                    msg.sender_id === yourSenderId
+                      ? "text-right pr-2 pl-10"
+                      : "text-left pr-10 pl-2"
                   }`}
                 >
-                  <span className="text-xl">{msg.sender_username}</span>
-                  <p>{msg.message}</p>
+                  {msg.sender_id !== yourSenderId && (
+                    <span className="text-sm">{msg.sender_username}</span>
+                  )}{" "}
+                  <p className="text-xl">{msg.message}</p>
                   <span className="text-xs">
-                    {new Date(msg.created_at).toLocaleTimeString()}
+                    {new Date(msg.created_at).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
                   </span>
                 </div>
               </div>
             ))
           ) : (
-            <div>No chat found</div>
+            <div className="flex justify-center">No chat found</div>
           )}
         </div>
-
-        {/* Input area fixed at the bottom */}
-        <div className="flex items-end p-3 rounded-lg bg-green-200">
-          <form className="w-full" onSubmit={handleSend}>
+        <div className="flex items-end p-2 rounded-lg bg-red-400">
+          <form className="flex w-full gap-2" onSubmit={handleSend}>
             <input
               type="text"
               placeholder="Type your message..."
-              className="w-full p-2 rounded-lg focus:outline-none"
+              className={`flex-1 p-2 rounded-lg sm:text-base text-sm ${
+                theme === "dark" ? "dark" : "light"
+              }`}
               value={input}
-              onChange={(e) => setInput(e.target.value)} // Handle input change
+              onChange={(e) => setInput(e.target.value)}
             />
-            <button type="submit" className="">
-              Send
-            </button>{" "}
-            {/* Hidden submit button */}
+            <button type="submit" className="flex-shrink-0">
+              <img
+                src="/image.png"
+                alt="send"
+                className="w-8 h-8 sm:w-10 sm:h-10 p-2"
+              />
+            </button>
           </form>
         </div>
       </div>

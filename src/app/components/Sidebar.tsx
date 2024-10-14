@@ -1,6 +1,7 @@
 // Sidebar.tsx
 import React, { useEffect, useState } from "react";
 import CreateRoom from "../components/CreateRoom";
+import { useTheme } from "./ThemeContext";
 
 interface Chat {
   id: number; // Should be number as per JSON
@@ -18,6 +19,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ chats, changeRoom }) => {
+  const { theme } = useTheme();
   const [showCreateRoom, setShowCreateRoom] = useState(false); // State to show/hide CreateRoom component
   const onClose = () => {
     setShowCreateRoom(false);
@@ -38,22 +40,26 @@ const Sidebar: React.FC<SidebarProps> = ({ chats, changeRoom }) => {
   useEffect(() => {}, [chats]);
 
   return (
-    <div className="w-1/4 p-4 bg-blue-300 rounded-lg">
-      <div className="flex items-center justify-between p-2 rounded-lg shadow">
+    <div className="w-1/4 p-4 bg-blue-950 rounded-lg">
+      <div className="flex items-center justify-between p-2 rounded-lg shadow bg-blue-800">
         <input
           type="text"
           placeholder="Search"
-          className="w-full p-2 text-sm rounded-md focus:outline-none"
+          className={`w-full p-2 text-sm rounded-md focus:outline-none ${
+            theme === "dark" ? "dark" : "light"
+          }`}
         />
-        <button
-          onClick={() => setShowCreateRoom(true)}
-          className="create-room-btn bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Create Room
+        <button onClick={() => setShowCreateRoom(true)} className="gap-2">
+          <img
+            src="/newmessage.png"
+            alt="newmessage"
+            className="w-6 h-6 sm:w-10 sm:h-10 p-2"
+          />
+          {/* Create Room */}
         </button>
         {/* Conditionally render the CreateRoom component */}
         {showCreateRoom && (
-          <div className="create-room-modal bg-white p-6 rounded shadow-lg fixed inset-0 z-50 flex justify-center items-center bg-opacity-40">
+          <div className="create-room-modal bg-blue-900 p-6 rounded shadow-lg fixed inset-0 z-50 flex justify-center items-center bg-opacity-90">
             <div className="relative">
               <CreateRoom onClose={onClose} handleChatClick={handleChatClick} />
             </div>
@@ -69,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ chats, changeRoom }) => {
               onClick={() => handleChatClick(chat)}
             >
               <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full"></div>
+                <div className="w-10 h-10 rounded-full bg-gray-300"></div>
                 <div className="ml-3">
                   <p className="font-semibold">
                     {chat.is_group ? chat.name : chat.participants_usernames[0]}
@@ -77,7 +83,13 @@ const Sidebar: React.FC<SidebarProps> = ({ chats, changeRoom }) => {
                   <p className="text-sm">{chat.last_message}</p>
                 </div>
               </div>
-              <span className="text-xs">{chat.last_message_time}</span>
+              <span className="text-xs">
+                {new Date(chat.last_message_time).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                })}
+              </span>
             </div>
           ))
         ) : (

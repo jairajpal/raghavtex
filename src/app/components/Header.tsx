@@ -2,75 +2,41 @@
 import Link from "next/link";
 import ThemeToggleButton from "./ThemeToggleButton";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import { useRouter, usePathname } from "next/navigation";
+import { handleApiError } from "@/utils/tools";
+import { ErrorContext } from "@/contexts/ErrorContext";
 
 const Header = () => {
   const { isAuthenticated, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const { addError } = useContext(ErrorContext);
 
   const isInventoryManagementActive = pathname === "/raw-material";
   const isTanaActive = pathname === "/tana";
-
-  console.log("isAuthenticated: Header", isAuthenticated);
+  const isChatActive = pathname === "/chat";
 
   const [href, setHref] = useState("/");
-  const [profile, setProfile] = useState(null);
-
-  const getCSRFToken = () => {
-    const csrfCookie = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("csrftoken="))
-      ?.split("=")[1];
-    return csrfCookie;
-  };
-
-  const fetchProfile = async () => {
-    try {
-      const response = await axiosInstance.get("/api/profile/", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-      setProfile(response.data);
-    } catch (error) {
-      console.error("Error logging in", error);
-    }
-  };
 
   const onLogout = async () => {
     try {
-      console.log("onLogout: ");
-      console.log("getCSRFToken(): ", getCSRFToken());
-      const response = await axiosInstance.post(
-        "/api/logout/",
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCSRFToken(),
-          },
-        }
-      );
-      console.log("response: ", response);
+      const response = await axiosInstance.post("/user/logout/", {}, {});
       logout();
       router.push("/login");
-    } catch (error) {
-      console.error("Error logging in", error);
+    } catch (error: any) {
+      handleApiError(error, addError);
     }
   };
 
   useEffect(() => {
     if (isAuthenticated) {
-      setHref("/home");
-      fetchProfile();
+      setHref("/about");
+      // fetchProfile();
     } else {
       setHref("/");
-      fetchProfile();
+      // fetchProfile();
     }
   }, [isAuthenticated]);
 
@@ -89,7 +55,9 @@ const Header = () => {
               <Link
                 href="/raw-material"
                 className={`mr-5 hover:text-gray-500 transform transition-transform duration-300 ${
-                  isInventoryManagementActive ? "text-xl" : ""
+                  isInventoryManagementActive
+                    ? "text-2xl font-bold underline decoration-dotted"
+                    : ""
                 }`}
               >
                 Inventory Management
@@ -97,10 +65,22 @@ const Header = () => {
               <Link
                 href="/tana"
                 className={`mr-5 hover:text-gray-500 transform transition-transform duration-300 ${
-                  isTanaActive ? "text-xl" : ""
+                  isTanaActive
+                    ? "text-2xl font-bold underline decoration-dotted"
+                    : ""
                 }`}
               >
                 Tana
+              </Link>
+              <Link
+                href="/chat"
+                className={`mr-5 hover:text-gray-500 transform transition-transform duration-300 ${
+                  isChatActive
+                    ? "text-2xl font-bold underline decoration-dotted"
+                    : ""
+                }`}
+              >
+                Chat
               </Link>
             </>
           )}
@@ -108,11 +88,26 @@ const Header = () => {
         <div className="">
           <ThemeToggleButton />
         </div>
-        <div className="px-8">
-          <button className="btn relative" onClick={onLogout}>
-            Logout
-          </button>
-        </div>
+        {isAuthenticated && (
+          <>
+            <div className="px-4 pl-8">
+              <button
+                className="relative bg-slate-300 p-2 w-10 h-10 rounded-lg hover:bg-blue-200"
+                onClick={onLogout}
+              >
+                <img src="/logout.png" alt="logout" />
+              </button>
+            </div>
+            <div className="px-4 pr-8">
+              <button
+                className="relative bg-slate-300 p-2 w-10 h-10 rounded-lg hover:bg-blue-200"
+                onClick={onLogout}
+              >
+                <img src="/profile.png" alt="logout" />
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </header>
   );

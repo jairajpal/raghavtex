@@ -54,7 +54,6 @@ const CreateRoom = ({
   };
 
   const handleRoomChange = async (participant: any) => {
-    console.log("id: ", participant);
     try {
       const response = await axiosInstance.post(
         "/chats/room",
@@ -69,7 +68,6 @@ const CreateRoom = ({
           },
         }
       );
-      console.log("response.data: ", response.data);
       setIsGroup(false);
       setParticipants([]);
       handleChatClick({ id: response.data.id, chatName: participant.username });
@@ -83,13 +81,11 @@ const CreateRoom = ({
   // Handle participant selection
   const handleParticipantChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedId = parseInt(e.target.value);
-    console.log("selectedId: ", selectedId);
     setParticipants((prev: any) =>
       prev.includes(selectedId)
         ? prev.filter((id: any) => id !== selectedId)
         : [...prev, selectedId]
     );
-    console.log("participants: ", participants);
   };
 
   // Fetch all available users/participants
@@ -100,7 +96,6 @@ const CreateRoom = ({
           "Content-Type": "application/json",
         },
       });
-      console.log("response.data: ", response.data);
       setAllParticipants(response.data);
     } catch (error) {
       console.error("Error fetching participants:", error);
@@ -116,18 +111,15 @@ const CreateRoom = ({
     <div className="fixed theme inset-0 z-50 flex items-center justify-center">
       <div className="w-full max-w-md p-6 rounded-lg shadow-lg relative">
         <button
-          className="absolute top-2 right-4 text-gray-500 hover:text-gray-700"
+          className="absolute top-2 right-4 hover:text-blue-200"
           onClick={onClose}
         >
           ✕
         </button>
         <h2 className="text-lg font-semibold mb-4">Create a Room</h2>
         <form onSubmit={handleCreateRoom}>
-          <div className="mb-4">
-            <label
-              htmlFor="isGroup"
-              className="block text-sm font-medium text-gray-700"
-            >
+          <div className="flex mb-4">
+            <label htmlFor="isGroup" className="flex text-sm font-medium">
               Is Group Chat:
             </label>
             <input
@@ -135,16 +127,13 @@ const CreateRoom = ({
               id="isGroup"
               checked={isGroup}
               onChange={() => setIsGroup(!isGroup)}
-              className="mt-1"
+              className="flex m-1"
             />
           </div>
 
           {isGroup && (
-            <div className="mb-4">
-              <label
-                htmlFor="roomName"
-                className="block text-sm font-medium text-gray-700"
-              >
+            <div className="mb-4 animate-bounce">
+              <label htmlFor="roomName" className=" text-sm font-medium ">
                 Room Name:
               </label>
               <input
@@ -160,9 +149,7 @@ const CreateRoom = ({
           )}
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
-              Participants:
-            </label>
+            <label className=" text-sm font-medium">Participants:</label>
             <div className="mt-1 space-y-2">
               {allParticipants.map((participant) => (
                 <div key={participant.id} className="flex items-center">
