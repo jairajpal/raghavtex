@@ -40,8 +40,12 @@ const Sidebar: React.FC<SidebarProps> = ({ chats, changeRoom }) => {
   useEffect(() => {}, [chats]);
 
   return (
-    <div className="w-1/4 p-4 bg-blue-950 rounded-lg">
-      <div className="flex items-center justify-between p-2 rounded-lg shadow bg-blue-800">
+    <div className="w-1/4 p-4 rounded-lg">
+      <div
+        className={`flex items-center justify-between p-1 rounded-lg shadow border ${
+          theme === "dark" ? "border-white" : "border-black"
+        }`}
+      >
         <input
           type="text"
           placeholder="Search"
@@ -53,13 +57,13 @@ const Sidebar: React.FC<SidebarProps> = ({ chats, changeRoom }) => {
           <img
             src="/newmessage.png"
             alt="newmessage"
-            className="w-6 h-6 sm:w-10 sm:h-10 p-2"
+            className="w-8 h-6 sm:w-10 sm:h-10 p-2 light rounded-md"
           />
           {/* Create Room */}
         </button>
         {/* Conditionally render the CreateRoom component */}
         {showCreateRoom && (
-          <div className="create-room-modal bg-blue-900 p-6 rounded shadow-lg fixed inset-0 z-50 flex justify-center items-center bg-opacity-90">
+          <div className="create-room-modal p-6 rounded shadow-lg fixed inset-0 z-50 flex justify-center items-center bg-opacity-90">
             <div className="relative">
               <CreateRoom onClose={onClose} handleChatClick={handleChatClick} />
             </div>
@@ -75,12 +79,14 @@ const Sidebar: React.FC<SidebarProps> = ({ chats, changeRoom }) => {
               onClick={() => handleChatClick(chat)}
             >
               <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-gray-300"></div>
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-300"></div>
                 <div className="ml-3">
                   <p className="font-semibold">
                     {chat.is_group ? chat.name : chat.participants_usernames[0]}
                   </p>
-                  <p className="text-sm">{chat.last_message}</p>
+                  <p className="text-sm truncate max-w-[300px]">
+                    {chat.last_message}
+                  </p>
                 </div>
               </div>
               <span className="text-xs">
